@@ -1,0 +1,13 @@
+# Python
+__pycache__/
+*.pyc
+
+# Environment
+.env
+
+# VS Code settings (optional)
+.vscode/
+
+# OS junk (optional)
+.DS_Store
+Thumbs.db
