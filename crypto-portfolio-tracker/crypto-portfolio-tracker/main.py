@@ -1,4 +1,12 @@
 # Function that collects price of any coin for any currency from CoinGecko
+# %% 
+# Packages for debug cells 
+from dotenv import load_dotenv
+import os 
+import requests
+load_dotenv()
+api_key  = os.getenv("CG_API_KEY")
+
 from price import coin_price
 
 if __name__ == "__main__":
@@ -32,10 +40,7 @@ def coin_stats(coinID, currency):
 
         return response.json()
 
-coins = ["bitcoin", "hedera", "solana"]
+coins = ["bitcoin", "hedera-hashgraph", "solana"]
 
 for coin in coins:                          
      print(coin_stats(coin, "gbp"))        # Applies function to multiple coins 
-
-
-
