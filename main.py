@@ -60,4 +60,7 @@ for CSV in CSVS:                            # Read all csv files and store all r
       with open(CSV, "r") as file:
             reader = csv.DictReader(file) 
             for row in reader:
+                next(file)  # Skip row 1
+                next(file)  # Skip row 2
+
                 allData.append(row) 
