@@ -58,14 +58,6 @@ allData = []
 
 for CSV in CSVS:                            # Read all csv files and store all rows in allData
       with open(CSV, "r") as file:
-<<<<<<< HEAD
-            reader = csv.DictReader(file) 
-            for row in reader:
-                next(file)  # Skip row 1
-                next(file)  # Skip row 2
-
-                allData.append(row) 
-=======
         next(file)  # Skip row 1
         next(file)  # Skip row 2
         reader = csv.DictReader(file) 
@@ -74,7 +66,7 @@ for CSV in CSVS:                            # Read all csv files and store all r
 
 # %%
 # Reading transaction data to reconstruct total holdings 
-
+import numpy as np
 #Empty dicts
 holdings = {}
 invested = {}
@@ -85,7 +77,7 @@ import re
 for row in allData:
     asset = row['Asset']
     type = row["Transaction Type"]
-    qty = round(float(row["Quantity Transacted"]),9) # Round to 9 dp to ensure accuracy
+    qty = np.round(float(row["Quantity Transacted"]),9) # Round to 9 dp to ensure accuracy
     pricenull = row["Price at Transaction"]
     clean_price = pricenull.replace("£", "").replace("Â", "").strip()  #Removes symbols for float conversion
     price = float(clean_price)
@@ -98,7 +90,7 @@ for row in allData:
     if type in ['Buy', 'Staking Income', 'Inflation Reward', 'Reward Income']:
          if asset not in invested:
               invested[asset] = 0
-         invested[asset] += price*qty
+         invested[asset] += np.round(price*qty,2)
          
     if type == 'Convert' and "Converted" in note:     #Computing notes column in order to extract information
                             
@@ -118,8 +110,9 @@ for row in allData:
                 holdings[to_asset] = 0
             holdings[to_asset] += to_amount
 
-    print(f'Current assets held: {holdings}')
-    print(invested)
 
+for asset, qty in holdings.items():
+    print(f'Quantity of {asset}, {np.round(qty, 8)}')
+for asset, qty in invested.items():
+     print(f'Total Invested (All Time) {asset}, £{np.round(qty, 2)} ')
 # %%
->>>>>>> 51b8863 (Added logic to process all the transaction types from the coinbase transaction history csv files in order to reconstruct my entire portfolio. This code was written over the last few days however, due to an issue with my github file being nested, none of my commits were pushed to github. This was fixed by flattening the folder structure and connecting the right file to github remote. During the building of this code I ran into inconsistencies between the output portfolio and my own due to misclassified or accidentley ommitted transaction type. I parse the convert transactions using regex to handle the convert statements in the Fees and/or Spread column, issues also arose from this as I needed to add logic to ensure it only read the convert statments and not any other transactions. The portfolio output now exactly matches my own and the code can be used for any input coinbase csv)
